@@ -73,6 +73,8 @@ app.UseWelcomePage(new WelcomePageOptions
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
