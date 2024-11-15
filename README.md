@@ -1,33 +1,43 @@
-Employement Assessment
+
+# Employement Assessment
+
 Appointment management system for a clinic.
 
-Development
-Prerequisites
-Make sure you have the following installed before getting started:
+# Development
 
-.NET SDK (version 6.0 or higher)
-MySQL (version 8.0 or higher)
-Git
-To clone this repository:
- Git clone https://github.com/JEscobar07/CitasClinica.git
+    # Prerequisites
 
-To restore dependencies
-Restore NuGet packages:
+    Make sure you have the following installed before getting started:
 
- dotnet restore 
-.env file
+    * .NET SDK (version 6.0 or higher)
+    * MySQL (version 8.0 or higher)
+    * Git To clone this repository: git clone https://github.com/JEscobar07/CitasClinica.git
+#   To restore dependencies
+
+    Restore NuGet packages:
+
+    dotnet restore
+
+#   .env file
 Make sure you add the environment variables locally in the .env file:
 
-DB_HOST =
-DB_PORT =
-DB_DATABASE =
-DB_USERNAME =
-DB_PASSWORD =
+    DB_HOST =
 
-JWT_KEY =
-JWT_ISSUER =
-JWT_AUDIENCE =
-JWT_EXPIREMINUTES =
+    DB_PORT =
 
-To run the project in dev mode
- dotnet run 
+    DB_DATABASE =
+
+    DB_USERNAME =
+
+    DB_PASSWORD =
+
+    JWT_KEY =
+
+    JWT_ISSUER =
+
+    JWT_AUDIENCE =
+
+    JWT_EXPIREMINUTES =
+
+# To run the project in dev mode
+    dotnet run 
