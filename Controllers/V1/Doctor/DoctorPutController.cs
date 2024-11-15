@@ -22,7 +22,7 @@ namespace CitasClinica.Controllers.V1.Doctor
         [HttpPut("{doctorId}/appointments/{appointmentId}/status")]
         [SwaggerOperation(
             Summary = "Update the status of an appointment",
-            Description = "This endpoint allows updating the status of a specific appointment for a doctor."
+            Description = "This endpoint allows updating the status of a specific appointment for a doctor.\nScheduled, Completed or Cancelled"
         )]
         [SwaggerResponse(200, "Appointment status updated successfully.")]
         [SwaggerResponse(400, "Invalid request data.")]

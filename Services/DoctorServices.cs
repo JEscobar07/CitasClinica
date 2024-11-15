@@ -26,6 +26,8 @@ namespace CitasClinica.Services
             var appointments = await _context.Appointments
                 .Where(a => a.DoctorId == doctorId && a.Status != "Cancelled") // Filter by doctorId and status != "Cancelled"
                 .OrderBy(a => a.DateTime) // Order by appointment date, earliest first
+                .Include(a => a.Patient) // Include the patient details for each appointment
+                .Include(a => a.Doctor) // Include the doctor details for each appointment
                 .ToListAsync(); // Fetch from database
 
             return appointments; // Return the list of scheduled appointments

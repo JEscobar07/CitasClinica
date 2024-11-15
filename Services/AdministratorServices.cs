@@ -59,6 +59,7 @@ namespace CitasClinica.Services
             var availabilities = await _context.Availabilities
                 .Where(a => a.Available) // Only fetch available time slots
                 .OrderBy(a => a.DateTime) // Order the slots by date and time
+                .Include(a => a.Doctor) // Include the doctor information in the response
                 .ToListAsync();
 
             return availabilities;
