@@ -16,14 +16,9 @@ namespace CitasClinica.Models
         [Column("id")]
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(100)]
-        [EmailAddress]
         [Column("email")]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(100)]
         [Column("password")]
         public string Password { get; set; }
     }
