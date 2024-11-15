@@ -1,4 +1,6 @@
 using CitasClinica.Data;
+using CitasClinica.Repositories;
+using CitasClinica.Services;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +25,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Services
+builder.Services.AddScoped<IPatientRepository, PatientServices>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,6 +36,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//Called to Welcome page
+
+app.UseWelcomePage(new WelcomePageOptions
+{
+    Path = "/"
+});
 
 app.UseHttpsRedirection();
 
