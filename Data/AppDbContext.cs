@@ -1,5 +1,6 @@
 
 using CitasClinica.Models;
+using CitasClinica.Seeders;
 using Microsoft.EntityFrameworkCore;
 
 namespace CitasClinica.Data
@@ -20,7 +21,12 @@ namespace CitasClinica.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            AdministratorsSeeder.Seed(modelBuilder);
+            PatientsSeeder.Seed(modelBuilder,5);
+            DoctorsSeeder.Seed(modelBuilder, 5);
+            AvailabilitySeeder.Seed(modelBuilder, 5);
+            AppointmentsSeeder.Seed(modelBuilder, 5);
+            HistoryDatesSeeder.Seed(modelBuilder, 5);
         }
     }
 }
