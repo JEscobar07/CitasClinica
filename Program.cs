@@ -84,6 +84,8 @@ builder.Services.AddSwaggerGen(c =>
 
 //Services
 builder.Services.AddScoped<IPatientRepository, PatientServices>();
+builder.Services.AddScoped<IDoctorRepository, DoctorServices>();
+builder.Services.AddScoped<IAdministratorRepository, AdministratorServices>();
 
 var app = builder.Build();
 

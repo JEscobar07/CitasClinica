@@ -33,7 +33,7 @@ namespace CitasClinica.Controllers.V1.Auth
         )]
         [SwaggerResponse(400, "Invalid request data.")]
         [SwaggerResponse(201, "Administrator registered successfully.")]
-        public async Task<ActionResult<Administrator>> PostRegister([FromBody] AdministratorDTO administratorDTO)
+        public async Task<ActionResult<Models.Administrator>> PostRegister([FromBody] AdministratorDTO administratorDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -42,7 +42,7 @@ namespace CitasClinica.Controllers.V1.Auth
             else
             {
                 // Encrypt the password before storing it
-                var user = new Administrator
+                var user = new Models.Administrator
                 {
                     Email = administratorDTO.Email,
                     Password = utilities.EncryptSHA256(administratorDTO.Password)
