@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CitasClinica.DTOS;
 using CitasClinica.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace CitasClinica.Controllers.V1.Patient
 {
@@ -17,18 +18,25 @@ namespace CitasClinica.Controllers.V1.Patient
         {
         }
 
-        // Request appointment
+        // Request an appointment
         [HttpPost("{patientId}/appointments")]
+        [SwaggerOperation(
+            Summary = "Request an appointment",
+            Description = "Allows a patient to request an appointment with a specified doctor at a given time."
+        )]
+        [SwaggerResponse(400, "Invalid request data.")]
+        [SwaggerResponse(404, "Patient or availability not found.")]
+        [SwaggerResponse(201, "Appointment successfully created.")]
         public async Task<IActionResult> RequestAppointment(int patientId, [FromBody] AppointmentDTO appointmentRequest)
         {
             try
             {
                 var appointment = await patientRepository.RequestAppointmentAsync(patientId, appointmentRequest);
-                return Ok(appointment);
+                return CreatedAtAction(nameof(RequestAppointment), new { id = appointment.Id }, appointment); // Return 201 Created with appointment details
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message); // Return 400 Bad Request if there's an error
             }
         }
     }

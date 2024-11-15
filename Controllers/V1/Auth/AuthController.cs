@@ -8,6 +8,7 @@ using CitasClinica.DTOS;
 using CitasClinica.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace CitasClinica.Controllers.V1.Auth
 {
@@ -24,52 +25,75 @@ namespace CitasClinica.Controllers.V1.Auth
             utilities = _utilities;
         }
 
+        // Register a new administrator
         [HttpPost("Register")]
+        [SwaggerOperation(
+            Summary = "Register a new administrator",
+            Description = "Allows an administrator to register by providing an email and a password. The password is encrypted before storing."
+        )]
+        [SwaggerResponse(400, "Invalid request data.")]
+        [SwaggerResponse(201, "Administrator registered successfully.")]
         public async Task<ActionResult<Administrator>> PostRegister([FromBody] AdministratorDTO administratorDTO)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState); // Return 400 Bad Request if model state is invalid
             }
             else
             {
+                // Encrypt the password before storing it
                 var user = new Administrator
                 {
                     Email = administratorDTO.Email,
                     Password = utilities.EncryptSHA256(administratorDTO.Password)
                 };
+
+                // Add the new administrator to the database
                 await appDbContext.Administrators.AddAsync(user);
                 await appDbContext.SaveChangesAsync();
-                return Ok(user);
+
+                // Return the newly created administrator details
+                return CreatedAtAction(nameof(PostRegister), new { id = user.Id }, user); // 201 Created with location header
             }
         }
 
+        // Login an administrator and generate a JWT token
         [HttpPost("Login")]
+        [SwaggerOperation(
+            Summary = "Login an administrator",
+            Description = "Authenticates an administrator by email and password and returns a JWT token if successful."
+        )]
+        [SwaggerResponse(400, "Invalid request data.")]
+        [SwaggerResponse(401, "Unauthorized: Invalid email or password.")]
+        [SwaggerResponse(200, "Login successful, JWT token generated.")]
         public async Task<ActionResult> PostLogin([FromBody] AdministratorDTO administratorDTO)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState); // Return 400 Bad Request if model state is invalid
             }
             else
             {
-                var userFound = await appDbContext.Administrators.FirstOrDefaultAsync(i => i.Email == administratorDTO.Email);
+                var userFound = await appDbContext.Administrators
+                    .FirstOrDefaultAsync(i => i.Email == administratorDTO.Email);
+
                 if (userFound == null)
                 {
-                    return Unauthorized("Email invalido");
+                    return Unauthorized("Invalid email."); // Return 401 Unauthorized if email doesn't match
                 }
 
-                var passwordvalid = userFound.Password == utilities.EncryptSHA256(administratorDTO.Password);
+                var passwordValid = userFound.Password == utilities.EncryptSHA256(administratorDTO.Password);
 
-                if (passwordvalid == false)
+                if (!passwordValid)
                 {
-                    return Unauthorized("Password invalida");
+                    return Unauthorized("Invalid password."); // Return 401 Unauthorized if password doesn't match
                 }
-                //Here we call the method to create the jwt
+
+                // Generate JWT token upon successful login
                 var token = utilities.GenerateJwtToken(userFound);
 
-                // Here the token can be sent with a dictionary to accompany it with a message example: Ok( new{ message = “Save this token”, jwt = token})
-                return Ok(new { message = "Guardar este token", jwt = token });
+                // Return the token with a success message
+                return Ok(new { message = "Save this token", jwt = token });
             }
         }
     }
